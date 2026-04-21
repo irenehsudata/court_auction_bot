@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Court Auction Console</title>
+    <link rel="stylesheet" href="/assets/style.css">
+    <script src="/assets/app.js" defer></script>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Court Auction Console</p>
+          <h1>Inspect slots, place bids, and approve winners from one screen.</h1>
+          <p class="hero-text">
+            This page talks directly to the FastAPI backend so you can verify the auction logic without building Telegram, WhatsApp, or a separate web app first.
+          </p>
+        </div>
+        <div class="hero-panel">
+          <div class="panel-label">API</div>
+          <div class="endpoint">GET /slots</div>
+          <div class="endpoint">POST /slots/{id}/bids</div>
+          <div class="endpoint">POST /admin/slots/{id}/approve</div>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="controls-card">
+          <div class="section-title-row">
+            <h2>User Controls</h2>
+            <button id="refreshButton" class="button secondary" type="button">Refresh Data</button>
+          </div>
+          <div class="field-grid">
+            <label class="field">
+              <span>User ID</span>
+              <input id="userIdInput" type="text" placeholder="alice">
+            </label>
+            <label class="field">
+              <span>Play Date Filter</span>
+              <select id="playDateSelect">
+                <option value="">All upcoming dates</option>
+              </select>
+            </label>
+          </div>
+          <p class="hint">
+            To place a bid, enter a user ID and use increments like <code>10.50</code>, <code>11.00</code>, <code>11.50</code>.
+          </p>
+        </section>
+
+        <section class="controls-card admin-card">
+          <div class="section-title-row">
+            <h2>Admin Controls</h2>
+            <button id="pendingButton" class="button secondary" type="button">Show Pending Approval</button>
+          </div>
+          <div class="field-grid">
+            <label class="field">
+              <span>Admin Token</span>
+              <input id="adminTokenInput" type="password" value="dev-admin-token">
+            </label>
+            <label class="field">
+              <span>Display Mode</span>
+              <select id="viewModeSelect">
+                <option value="all">All slots</option>
+                <option value="pending">Pending admin only</option>
+              </select>
+            </label>
+          </div>
+          <p class="hint">
+            When the token is valid, cards in <code>CLOSED_PENDING_ADMIN</code> state will show approve and reject actions.
+          </p>
+        </section>
+
+        <section class="feedback-strip">
+          <div id="statusBanner" class="status-banner neutral">Loading slots...</div>
+        </section>
+
+        <section class="stats-grid">
+          <article class="stat-card">
+            <span class="stat-label">Upcoming slots</span>
+            <strong id="slotCount">0</strong>
+          </article>
+          <article class="stat-card">
+            <span class="stat-label">Open for bidding</span>
+            <strong id="openCount">0</strong>
+          </article>
+          <article class="stat-card">
+            <span class="stat-label">Pending admin</span>
+            <strong id="pendingCount">0</strong>
+          </article>
+          <article class="stat-card">
+            <span class="stat-label">Reserved</span>
+            <strong id="reservedCount">0</strong>
+          </article>
+        </section>
+
+        <section id="slotsContainer" class="slot-groups"></section>
+      </main>
+    </div>
+  </body>
+</html>
